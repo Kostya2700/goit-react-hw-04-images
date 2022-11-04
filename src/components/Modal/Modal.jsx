@@ -4,7 +4,6 @@ const modalRoot = document.getElementById('modal-root');
 export default class Modal extends Component {
   handleKeyDown = e => {
     if (e.code === 'Escape') {
-      console.log('Closes');
       this.props.onClose();
     }
   };
@@ -24,7 +23,9 @@ export default class Modal extends Component {
   render() {
     return createPortal(
       <div className="Overlay" onClick={this.handleDrop}>
-        <div className="Modal">{this.props.children}</div>
+        <div className="Modal">
+          <img src={this.props.imgSrc} alt="" />
+        </div>
       </div>,
       modalRoot
     );
