@@ -7,8 +7,8 @@ const Loader = ({ bool }) => {
       width={80}
       color="#4fa94d"
       wrapperStyle={{
-        position: 'absolute',
-        top: '50%',
+        position: 'fixed',
+        bottom: '0',
         left: '50%',
         transform: 'translate(-50%, -50%)',
       }}

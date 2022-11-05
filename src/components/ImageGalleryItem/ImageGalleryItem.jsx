@@ -4,15 +4,15 @@ class GalleryItem extends Component {
     const { searchName } = this.props;
     return (
       searchName &&
-      searchName.map(ren => {
+      searchName.map(pic => {
         return (
-          <li className="ImageGalleryItem" key={ren.id}>
+          <li className="ImageGalleryItem" key={pic.id}>
             <img
-              id={ren.id}
+              id={pic.id}
               onClick={this.props.onClick}
               className="ImageGalleryItem-image"
-              src={ren.webformatURL}
-              alt={ren.tags}
+              src={pic.webformatURL}
+              alt={pic.tags}
             />
           </li>
         );

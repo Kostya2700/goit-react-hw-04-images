@@ -20,7 +20,7 @@ export class App extends Component {
   };
   onClickImage = e => {
     const currentImg = Number(e.currentTarget.id);
-
+    console.log(e);
     // this.setState({ currentSrc: e.target.src });
     this.toggleModal();
     this.state.arSearch.map(img => {
@@ -57,7 +57,6 @@ export class App extends Component {
         }
 
         return this.setState(pS => {
-          console.log(pS);
           return { arSearch: [...this.state.arSearch, ...response] };
         });
       } catch (error) {
@@ -73,7 +72,6 @@ export class App extends Component {
   };
   render() {
     const { arSearch, visible, showModal, currentSrc } = this.state;
-    console.log('src', currentSrc);
     return (
       <div className="App">
         <ToastContainer autoClose={3000} />
