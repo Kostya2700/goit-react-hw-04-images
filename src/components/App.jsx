@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Modal from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { GalleryList } from './ImageGallery/ImageGallery';
-import { GalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
@@ -20,13 +19,13 @@ export class App extends Component {
     error: null,
   };
   onClickImage = e => {
-    const currentModalId = Number(e.currentTarget.id);
+    const currentImg = Number(e.currentTarget.id);
 
     // this.setState({ currentSrc: e.target.src });
     this.toggleModal();
-    this.state.arSearch.map(obj => {
-      if (obj.id === currentModalId) {
-        return this.setState({ currentSrc: obj });
+    this.state.arSearch.map(img => {
+      if (img.id === currentImg) {
+        return this.setState({ currentSrc: img });
       } else {
         return null;
       }
@@ -49,20 +48,20 @@ export class App extends Component {
     if (pS.search !== search || pS.page !== page) {
       // console.log('Wait');
       try {
-        this.setState({ visible: true, arSearch: null });
+        this.setState({ visible: true });
         const response = await apiSearch(search, page);
         // console.log(response);
         if (response.length === 0) {
           toast.info('Images not found');
           return;
         }
-        this.setState({ page: 1 });
+
         return this.setState(pS => {
-          // console.log(pS);
-          return { arSearch: [...response] };
+          console.log(pS);
+          return { arSearch: [...this.state.arSearch, ...response] };
         });
       } catch (error) {
-        console.error(error);
+        this.setState({ error });
       } finally {
         this.setState({ visible: false });
       }
@@ -70,29 +69,20 @@ export class App extends Component {
   }
 
   handleSearchForm = search => {
-    this.setState({ search });
+    this.setState({ search, page: 1, arSearch: [] });
   };
   render() {
+    const { arSearch, visible, showModal, currentSrc } = this.state;
+    console.log('src', currentSrc);
     return (
       <div className="App">
         <ToastContainer autoClose={3000} />
         <Searchbar inputSearch={this.handleSearchForm} />
-        {this.state.showModal && (
-          <Modal
-            onClose={this.toggleModal}
-            imgSrc={this.state.currentSrc.largeImageURL}
-          />
-        )}
-        <GalleryList>
-          {this.state.visible && <Loader bool={this.state.visible} />}
-          {
-            <GalleryItem
-              searchName={this.state.arSearch}
-              onClick={this.onClickImage}
-            />
-          }
+        {showModal && <Modal onClose={this.toggleModal} imgSrc={currentSrc} />}
+        <GalleryList searchName={arSearch} onClick={this.onClickImage}>
+          {visible && <Loader bool={visible} />}
         </GalleryList>
-        {this.state.arSearch && (
+        {arSearch.length > 0 && arSearch.length >= 12 && (
           <button className="Button" type="button" onClick={this.incrementPage}>
             Load more
           </button>
