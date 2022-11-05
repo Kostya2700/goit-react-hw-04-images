@@ -1,4 +1,5 @@
 import { Oval } from 'react-loader-spinner';
+import PropTypes from 'prop-types';
 
 const Loader = ({ bool }) => {
   return (
@@ -8,11 +9,13 @@ const Loader = ({ bool }) => {
       color="#4fa94d"
       wrapperStyle={{
         position: 'fixed',
-        bottom: '0',
+        // top: '50%',
+        bottom: '-40px',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        // z-index:'10',
       }}
-      wrapperClass=""
+      wrapperClass="wrappep-oval"
       visible={bool}
       ariaLabel="oval-loading"
       secondaryColor="#4fa94d"
@@ -22,3 +25,6 @@ const Loader = ({ bool }) => {
   );
 };
 export { Loader };
+Loader.propTypes = {
+  bool: PropTypes.bool.isRequired,
+};

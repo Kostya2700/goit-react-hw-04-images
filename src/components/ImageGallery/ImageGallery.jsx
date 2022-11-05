@@ -1,5 +1,6 @@
 import { GalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import React from 'react';
+import PropTypes from 'prop-types';
 const GalleryList = ({ searchName, onClick, children }) => {
   return (
     <ul className="ImageGallery">
@@ -9,3 +10,7 @@ const GalleryList = ({ searchName, onClick, children }) => {
   );
 };
 export { GalleryList };
+GalleryList.propTypes = {
+  searchName: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
+};

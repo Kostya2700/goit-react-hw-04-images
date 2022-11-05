@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 class GalleryItem extends Component {
   render() {
     const { searchName } = this.props;
@@ -21,3 +22,6 @@ class GalleryItem extends Component {
   }
 }
 export { GalleryItem };
+GalleryItem.propTypes = {
+  searchName: PropTypes.array.isRequired,
+};

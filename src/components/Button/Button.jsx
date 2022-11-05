@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import css from './Button.module.css';
 
 export class Button extends Component {
@@ -17,5 +17,5 @@ export class Button extends Component {
 }
 
 Button.propTypes = {
-  onClickLoadMore: propTypes.func.isRequired,
+  onClickLoadMore: PropTypes.func.isRequired,
 };

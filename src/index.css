@@ -216,3 +216,6 @@ img {
 .Button:focus {
   background-color: #303f9f;
 }
+.wrappep-oval {
+  z-index: 10;
+}

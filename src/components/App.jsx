@@ -20,11 +20,12 @@ export class App extends Component {
   };
   onClickImage = e => {
     const currentImg = Number(e.currentTarget.id);
-    console.log(e);
+    // console.log(e.target.src);
     // this.setState({ currentSrc: e.target.src });
     this.toggleModal();
     this.state.arSearch.map(img => {
       if (img.id === currentImg) {
+        // console.log(img);
         return this.setState({ currentSrc: img });
       } else {
         return null;
@@ -80,7 +81,7 @@ export class App extends Component {
         <GalleryList searchName={arSearch} onClick={this.onClickImage}>
           {visible && <Loader bool={visible} />}
         </GalleryList>
-        {arSearch.length > 0 && arSearch.length >= 12 && (
+        {arSearch.length > 0 && arSearch.length >= 12 && !visible && (
           <button className="Button" type="button" onClick={this.incrementPage}>
             Load more
           </button>
