@@ -18,6 +18,7 @@ export class App extends Component {
     currentSrc: null,
     alt: null,
     error: null,
+    lengthArr: null,
   };
   onClickImage = (largeImg, alt) => {
     this.toggleModal();
@@ -42,14 +43,16 @@ export class App extends Component {
       try {
         this.setState({ visible: true });
         const response = await apiSearch(search, page);
-        // console.log(response);
         if (response.length === 0) {
           toast.info('Images not found');
           return;
         }
 
         return this.setState(pS => {
-          return { arSearch: [...this.state.arSearch, ...response] };
+          return {
+            arSearch: [...this.state.arSearch, ...response],
+            lengthArr: response.length,
+          };
         });
       } catch (error) {
         this.setState({ error });
@@ -63,7 +66,8 @@ export class App extends Component {
     this.setState({ search, page: 1, arSearch: [] });
   };
   render() {
-    const { arSearch, visible, showModal, currentSrc, alt } = this.state;
+    const { arSearch, visible, showModal, currentSrc, alt, lengthArr } =
+      this.state;
     return (
       <div className="App">
         <ToastContainer autoClose={3000} />
@@ -71,10 +75,12 @@ export class App extends Component {
         {showModal && (
           <Modal onClose={this.toggleModal} imgSrc={currentSrc} alt={alt} />
         )}
-        <GalleryList searchName={arSearch} onClick={this.onClickImage}>
-          {visible && <Loader bool={visible} />}
-        </GalleryList>
-        {arSearch.length > 0 && arSearch.length >= 12 && !visible && (
+        <GalleryList
+          searchName={arSearch}
+          onClick={this.onClickImage}
+        ></GalleryList>
+        {visible && <Loader bool={visible} />}
+        {arSearch.length > 0 && lengthArr >= 12 && !visible && (
           <button className="Button" type="button" onClick={this.incrementPage}>
             Load more
           </button>
