@@ -16,21 +16,12 @@ export class App extends Component {
     visible: false,
     page: 1,
     currentSrc: null,
+    alt: null,
     error: null,
   };
-  onClickImage = e => {
-    const currentImg = Number(e.currentTarget.id);
-    // console.log(e.target.src);
-    // this.setState({ currentSrc: e.target.src });
+  onClickImage = (largeImg, alt) => {
     this.toggleModal();
-    this.state.arSearch.map(img => {
-      if (img.id === currentImg) {
-        // console.log(img);
-        return this.setState({ currentSrc: img });
-      } else {
-        return null;
-      }
-    });
+    this.setState({ currentSrc: largeImg, alt });
   };
   incrementPage = () => {
     this.setState(state => ({
@@ -72,12 +63,14 @@ export class App extends Component {
     this.setState({ search, page: 1, arSearch: [] });
   };
   render() {
-    const { arSearch, visible, showModal, currentSrc } = this.state;
+    const { arSearch, visible, showModal, currentSrc, alt } = this.state;
     return (
       <div className="App">
         <ToastContainer autoClose={3000} />
         <Searchbar inputSearch={this.handleSearchForm} />
-        {showModal && <Modal onClose={this.toggleModal} imgSrc={currentSrc} />}
+        {showModal && (
+          <Modal onClose={this.toggleModal} imgSrc={currentSrc} alt={alt} />
+        )}
         <GalleryList searchName={arSearch} onClick={this.onClickImage}>
           {visible && <Loader bool={visible} />}
         </GalleryList>

@@ -9,8 +9,9 @@ class GalleryItem extends Component {
         return (
           <li className="ImageGalleryItem" key={pic.id}>
             <img
-              id={pic.id}
-              onClick={this.props.onClick}
+              onClick={() => {
+                this.props.onClick(pic.largeImageURL, pic.tags);
+              }}
               className="ImageGalleryItem-image"
               src={pic.webformatURL}
               alt={pic.tags}
