@@ -67,7 +67,12 @@ export function App() {
       <ToastContainer autoClose={3000} />
       <Searchbar inputSearch={handleSearchForm} />
       {showModal && (
-        <Modal onClose={toggleModal} imgSrc={currentSrc} alt={alt} />
+        <Modal
+          onClose={toggleModal}
+          imgSrc={currentSrc}
+          alt={alt}
+          showModal={showModal}
+        />
       )}
       <GalleryList searchName={arSearch} onClick={onClickImage}></GalleryList>
       {visible && <Loader bool={visible} />}
