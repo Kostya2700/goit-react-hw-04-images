@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Modal from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { GalleryList } from './ImageGallery/ImageGallery';
@@ -7,85 +7,76 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { apiSearch } from './Fetch-api/fetch-api';
 import { Loader } from './Loader/Loader';
+import { useEffect } from 'react';
 
-export class App extends Component {
-  state = {
-    showModal: false,
-    search: '',
-    arSearch: [],
-    visible: false,
-    page: 1,
-    currentSrc: null,
-    alt: null,
-    error: null,
-    lengthArr: null,
+export function App() {
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState('');
+  const [arSearch, setArSearch] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [alt, setAlt] = useState(null);
+  const [lengthArr, setLengthArr] = useState(null);
+  const [currentSrc, setCurrentSrc] = useState(null);
+
+  const onClickImage = (largeImg, alt) => {
+    toggleModal();
+    setCurrentSrc(largeImg);
+    setAlt(alt);
   };
-  onClickImage = (largeImg, alt) => {
-    this.toggleModal();
-    this.setState({ currentSrc: largeImg, alt });
+  const incrementPage = () => {
+    setPage(prev => prev + 1);
   };
-  incrementPage = () => {
-    this.setState(state => ({
-      page: state.page + 1,
-    }));
+  const toggleModal = e => {
+    setShowModal(!showModal);
   };
-  toggleModal = e => {
-    // console.log(e.target.src);
-    this.setState(state => ({
-      showModal: !state.showModal,
-    }));
-  };
-  async componentDidUpdate(pP, pS) {
-    const { search, page } = this.state;
-    // console.log(pS);
-    if (pS.search !== search || pS.page !== page) {
-      // console.log('Wait');
+  useEffect(() => {
+    if (!search) {
+      return;
+    }
+    const asyncAp = async () => {
       try {
-        this.setState({ visible: true });
+        setVisible(true);
+
         const response = await apiSearch(search, page);
         if (response.length === 0) {
           toast.info('Images not found');
           return;
         }
-
-        return this.setState(pS => {
-          return {
-            arSearch: [...this.state.arSearch, ...response],
-            lengthArr: response.length,
-          };
-        });
+        return (
+          setArSearch([...arSearch, ...response]), setLengthArr(response.length)
+        );
       } catch (error) {
-        this.setState({ error });
+        console.log(error);
       } finally {
-        this.setState({ visible: false });
+        setVisible(false);
       }
-    }
-  }
+    };
+    asyncAp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, page]);
 
-  handleSearchForm = search => {
-    this.setState({ search, page: 1, arSearch: [] });
+  const handleSearchForm = search => {
+    setSearch(search);
+    setPage(1);
+    setArSearch([]);
   };
-  render() {
-    const { arSearch, visible, showModal, currentSrc, alt, lengthArr } =
-      this.state;
-    return (
-      <div className="App">
-        <ToastContainer autoClose={3000} />
-        <Searchbar inputSearch={this.handleSearchForm} />
-        {showModal && (
-          <Modal onClose={this.toggleModal} imgSrc={currentSrc} alt={alt} />
-        )}
-        <GalleryList
-          searchName={arSearch}
-          onClick={this.onClickImage}
-        ></GalleryList>
-        {visible && <Loader bool={visible} />}
-        {arSearch.length > 0 && lengthArr >= 12 && !visible && (
-          <button className="Button" type="button" onClick={this.incrementPage}>
-            Load more
-          </button>
-        )}
-      </div>
-    );
-  }
+
+  return (
+    <div className="App">
+      <ToastContainer autoClose={3000} />
+      <Searchbar inputSearch={handleSearchForm} />
+      {showModal && (
+        <Modal onClose={toggleModal} imgSrc={currentSrc} alt={alt} />
+      )}
+      <GalleryList searchName={arSearch} onClick={onClickImage}></GalleryList>
+      {visible && <Loader bool={visible} />}
+      {arSearch.length > 0 && lengthArr >= 12 && !visible && (
+        <button className="Button" type="button" onClick={incrementPage}>
+          Load more
+        </button>
+      )}
+    </div>
+  );
 }
+// }
