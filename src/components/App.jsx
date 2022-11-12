@@ -44,7 +44,7 @@ export function App() {
           return;
         }
         return (
-          setArSearch([...arSearch, ...response]), setLengthArr(response.length)
+          setArSearch(p => [...p, ...response]), setLengthArr(response.length)
         );
       } catch (error) {
         console.log(error);
@@ -53,7 +53,6 @@ export function App() {
       }
     };
     asyncAp();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, page]);
 
   const handleSearchForm = search => {
